@@ -20,19 +20,19 @@ def main():
     create_table()
 
     
-    # with st.form(key="Today's Log"):
-    log_date = log.log_date
-    user_name = log.user_name
-    current_weight = log.current_weight
-    calories_intake = log.calories_intake
-    calories_burned = log.calories_burned
-    submit = st.form_submit_button(label="Submit")
+    with st.form(key="Today's Log"):
+        log_date = log.log_date
+        user_name = log.user_name
+        current_weight = log.current_weight
+        calories_intake = log.calories_intake
+        calories_burned = log.calories_burned
+        submit = st.form_submit_button(label="Submit")
 
     if submit == True:
         conn.execute(f"select * from workout_logs where user_name = '{user_name}' and log_date = '{log_date}'")
         results = cur.fetchone()
         
-        if results != None:
+        if results:
             st.warning("Your logs already updated in the system!")
         else:
             # sql = f"insert into workout_logs(log_date, user_name, current_weight, calories_intake, calories_burned) values({log_date}, '{user_name}', {current_weight}, {calories_intake}, {calories_burned})"
@@ -82,6 +82,7 @@ def update_log(log, log_date, current_weight, calories_intake, calories_burned):
         cur.execute("update workout_logs set  = :current_weight, :calories_intake, :calories_burned where log_date = :log_date)", \
                      {'current_weight': log.current_weight, 'calories_intake': log.calories_intake, \
                       'calories_burned': log.calories_burned, 'log_date': log.log_date })
+
 
 if __name__ == '__main__':
     main()
